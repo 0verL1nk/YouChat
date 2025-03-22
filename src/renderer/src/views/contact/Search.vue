@@ -32,6 +32,7 @@ const search = async () => {
   if (!result) {
     return
   }
+  proxy.Message.success('查询成功')
   searchResult.value = result.data
 }
 </script>

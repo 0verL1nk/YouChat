@@ -1,7 +1,7 @@
 <script setup lang="js">
 import { ElConfigProvider } from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
-import { ref, reactive, getCurrentInstance, nextTick } from 'vue'
+import { reactive, getCurrentInstance } from 'vue'
 const { proxy } = getCurrentInstance()
 const locale = zhCn
 const config = reactive({

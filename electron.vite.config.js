@@ -21,11 +21,10 @@ export default defineConfig({
       port: 5000,
       proxy: {
         '/api': {
-          target: 'http://xg-3.frp.one:57316',
+          target: 'http://127.0.0.1:5050/',
           changeOrigin: true,
-          pathRewrite: {
-            '^api': '/api'
-          }
+          ws: true,
+          rewrite: (path) => path.replace(/^\/api/, '')
           // '/api': 'http://127.0.0.1:5050/api'
         }
       }

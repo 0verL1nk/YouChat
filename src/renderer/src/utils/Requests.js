@@ -1,14 +1,15 @@
 import axios from 'axios'
 import { ElLoading } from 'element-plus'
 import Message from '../utils/Message'
-import Api from '../utils/Api'
+// import Api from '../utils/Api'
 const contentTypeForm = 'application/x-www-form-urlencoded;charset=UTF-8'
 const contentTypeJson = 'application/json'
 const responseTypeJson = 'json'
 let loading = null
 const instance = axios.create({
   withCredentials: true,
-  baseURL: (import.meta.env.PROD ? Api.prodDomain : '') + '/api',
+  // baseURL: (import.meta.env.PROD ? Api.prodDomain : '') + '/api',
+  baseURL: '/api',
   timeout: 10 * 1000
 })
 //请求前拦截器
@@ -42,11 +43,10 @@ instance.interceptors.response.use(
     if (responseType == 'arraybuffer' || responseType == 'blob') {
       return responseData
     }
-    // console.log(responseData)
     //正常请求
-    if (responseData.code == 200) {
+    if (response.status == 200) {
       return responseData
-    } else if (responseData.code == 901) {
+    } else if (response.status == 201) {
       //登录超时
       setTimeout(() => {
         window.ipcRenderer.send('reLogin')
@@ -60,6 +60,7 @@ instance.interceptors.response.use(
       return Promise.reject({ showError: showError, msg: responseData.info })
     }
   },
+  // 返回code不为20x
   (error) => {
     if (error.config.showLoading && loading) {
       loading.close()
@@ -89,7 +90,7 @@ const request = (config) => {
   let headers = {
     'Content-Type': contentType,
     'X-Requested-With': 'XMLHttpRequest',
-    token: token
+    Authorization: 'Bear ' + token
   }
 
   return instance

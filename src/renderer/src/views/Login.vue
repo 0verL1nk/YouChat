@@ -107,13 +107,13 @@
 </template>
 
 <script setup>
-import { ref, reactive, getCurrentInstance, nextTick } from 'vue'
+import { ref, getCurrentInstance, nextTick } from 'vue'
 import md5 from 'js-md5'
 import { useUserInfoStore } from '../stores/UserinfoStore'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+// import axios from 'axios'
 
-import { ElLoading } from 'element-plus'
+// import { ElLoading } from 'element-plus'
 
 const checkRemember = ref(false)
 const router = useRouter()
@@ -245,51 +245,25 @@ const checkValue = (type, value, msg) => {
 }
 const checkCodeUrl = ref(null)
 const changeCheckCode = async () => {
-  // let result = await proxy.Request({
-  //   url: proxy.Api.checkCode
-  // })
-  //TODO 抽象出函数
-  let result = null
-  let loading = null
-  loading = ElLoading.service({
-    lock: true,
-    text: '加载中......',
-    background: 'rgba(0, 0, 0, 0.7)'
-  })
-  axios({
-    method: 'POST',
-    url: '/api/account/checkCode',
-    // baseURL: 'http://xg-3.frp.one:57316/',
-    data: {}
-  }).then(
-    (response) => {
-      // console.log(response.data)
-      result = response.data
-      if (loading) {
-        loading.close()
-      }
-      if (result.code == 200) {
-        checkCodeUrl.value = result.data.checkCode
-        localStorage.setItem('checkCodeKey', result.data.checkCodeKey)
-      } else if (result.code == 901) {
-        //登录超时
-        setTimeout(() => {
-          window.ipcRenderer.send('reLogin')
-        }, 2000)
-        return Promise.reject({ showError: true, msg: '登录超时' })
-      }
-    },
-    (error) => {
-      console.log('错误', error.message)
-      if (loading) {
-        loading.close()
-      }
-      proxy.Message.error('请求发送失败')
+  let result = await proxy.Request({
+    url: proxy.Api.checkCode,
+    shwoLoading: true,
+    errorCallback: (response) => {
+      shwoLoading.value = false
+      errorMsg.value = response.info
+      proxy.Message.error(response.info)
     }
-  )
-  // if (!result) {
-  //   return
-  // }
+  })
+  if (!result) {
+    console.error('获取验证码失败')
+    return
+  }
+
+  checkCodeUrl.value = result.check_code
+  localStorage.setItem('checkCodeKey', result.check_code_key)
+  if (!result) {
+    return
+  }
 }
 changeCheckCode()
 const cleanVerify = () => {

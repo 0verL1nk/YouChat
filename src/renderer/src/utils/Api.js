@@ -1,11 +1,11 @@
 const api = {
   prodDomain: 'http://localhost:5050',
-  devDomain: 'http://xg-3.frp.one:57316',
+  devDomain: 'http://backen-youchat.overlink.top',
   prodWsDomain: 'ws:/127.0.0.1:5051/ws',
   devWsDomain: 'ws:/127.0.0.1:5051/ws',
-  checkCode: '/account/checkCode', //验证码
-  login: '/account/login', //登录
-  register: '/account/register', //注册
+  checkCode: '/checkCode', //验证码
+  login: '/login', //登录
+  register: '/register', //注册
   getSysSetting: '/account/getSysSetting',
   loadMyGroup: '/group/loadMyGroup', //获取我创建的群组
   saveGroup: '/group/saveGroup', //保存群组

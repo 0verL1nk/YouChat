@@ -211,7 +211,7 @@ const partJump = (data) => {
   }
 }
 .title-panel {
-  height: 60px;
+  height: 66px;
   width: 100%;
   display: flex;
   align-items: center;
